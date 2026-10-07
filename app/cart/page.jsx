@@ -8,5 +8,14 @@ import { getCartItems } from "@/lib/db";
 
 export default async function CartPage() {
   if (!(await getServerSession(authOptions))) redirect("/signin");
-  return <CartList initialItems={getCartItems()} />;
+
+  const items = getCartItems();
+  const savedQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  return (
+    <>
+      <p>Saved quantity from the server: {savedQuantity}</p>
+      <CartList initialItems={items} />
+    </>
+  );
 }
